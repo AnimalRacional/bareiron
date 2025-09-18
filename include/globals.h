@@ -154,6 +154,9 @@
 // If defined, log chunk generation events
 // #define DEV_LOG_CHUNK_GENERATION
 
+// If defined, send real peer address on handshake
+#define DEV_SEND_REAL_ADDR
+
 // If defined, allows dumping world data by sending 0xBEEF (big-endian),
 // and uploading world data by sending 0xFEED, followed by the data buffer.
 // Doesn't implement authentication, hence disabled by default.

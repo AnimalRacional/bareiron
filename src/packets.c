@@ -54,6 +54,14 @@ int cs_handshake (int client_fd) {
   if (recv_count == -1) return 1;
   printf("  Server address: %s\n", recv_buffer);
   printf("  Server port: %u\n", readUint16(client_fd));
+  #ifdef DEV_SEND_REAL_ADDR
+  struct sockaddr real_addr;
+  socklen_t len;
+  getpeername(client_fd, &real_addr, &len);
+  char str[INET_ADDRSTRLEN];
+  inet_ntop(AF_INET, &real_addr.sa_data, str, INET_ADDRSTRLEN);
+  printf("  Real address: %s\n", str);
+  #endif
   int intent = readVarInt(client_fd);
   if (intent == VARNUM_ERROR) return 1;
   printf("  Intent: %d\n\n", intent);
