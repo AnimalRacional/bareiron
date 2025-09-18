@@ -1140,19 +1140,18 @@ int cs_chat (int client_fd) {
   }
 
   // Shift message contents forward to make space for player name tag
-  memmove(recv_buffer + name_len + 3, recv_buffer, message_len + 1);
-  // Copy player name to index 1
-  memcpy(recv_buffer + 1, player->name, name_len);
+  memmove(recv_buffer + name_len + 2, recv_buffer, message_len + 1);
+  // Copy player name to index 0
+  memcpy(recv_buffer, player->name, name_len);
   // Surround player name with brackets and a space
-  recv_buffer[0] = '<';
-  recv_buffer[name_len + 1] = '>';
-  recv_buffer[name_len + 2] = ' ';
+  recv_buffer[name_len + 0] = ':';
+  recv_buffer[name_len + 1] = ' ';
 
   // Forward message to all connected players
   for (int i = 0; i < MAX_PLAYERS; i ++) {
     if (player_data[i].client_fd == -1) continue;
     if (player_data[i].flags & 0x20) continue;
-    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, message_len + name_len + 3);
+    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, message_len + name_len + 2);
   }
 
   readUint64(client_fd); // Ignore timestamp

@@ -161,12 +161,13 @@ void handlePlayerJoin (PlayerData* player) {
 
   // Prepare join message for broadcast
   uint8_t player_name_len = strlen(player->name);
-  strcpy((char *)recv_buffer, player->name);
-  strcpy((char *)recv_buffer + player_name_len, " joined the game");
+  strcpy((char *)recv_buffer, "§e");
+  strcpy((char *)recv_buffer + 3, player->name);
+  strcpy((char *)recv_buffer + player_name_len + 3, " joined the game");
 
   // Inform other clients (and the joining client) of the player's name and entity
   for (int i = 0; i < MAX_PLAYERS; i ++) {
-    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, 16 + player_name_len);
+    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, 19 + player_name_len);
     sc_playerInfoUpdateAddPlayer(player_data[i].client_fd, *player);
     if (player_data[i].client_fd != player->client_fd) {
       sc_spawnEntityPlayer(player_data[i].client_fd, *player);
